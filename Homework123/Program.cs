@@ -1,5 +1,10 @@
+using Homework123.Controllers;
 using Homework123.Data;
+using Homework123.Repositores.Abstract;
+using Homework123.Repositores.Concrete;
 using Homework123.Services;
+using Homework123.Services.Abstract;
+using Homework123.Services.Concrete;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,13 +16,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHostedService<BackgroundWorkerService>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<IGetMovieService, GetMovieService>();
+builder.Services.AddScoped<MovieController>();
+
 var connection = builder.Configuration.GetConnectionString("myconn");
 builder.Services.AddDbContext<MovieDBContext>(opt =>
 {
     opt.UseSqlServer(connection);
 
 });
-    builder.Services.AddHostedService<TimedHostedService>();
+
 
 
 var app = builder.Build();
