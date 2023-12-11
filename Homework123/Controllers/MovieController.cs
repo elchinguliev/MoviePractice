@@ -22,13 +22,19 @@ namespace Homework123.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAsync()
         {
+            int waitTimeInSeconds = 5;
+            while (true)
+            {
+
+            await Task.Delay(TimeSpan.FromSeconds(waitTimeInSeconds));
+
             var result = await movieGetService.GetMovieFromApi();
             var movie = _movieService.GetAll().FirstOrDefault(m => m.Title == result.Title);
-            if (movie == null)
-            {
-                _movieService.Add(result);
+                if (movie == null)
+                {
+                    _movieService.Add(result);
+                }
             }
-            return Ok();
         }
     }
 
